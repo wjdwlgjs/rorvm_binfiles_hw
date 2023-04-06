@@ -40,14 +40,18 @@ void generate_a(float freq, short amp, short phase, int nsamples) {
 void generate_b(float old_freq, float new_freq, int nsamples) {
     ifstream a;
     a.open("a.dat", ios::binary | ios::in);
-
+    // old dt
     float dt = (1. / old_freq) / 20.0;
 
     float *samples = new float[nsamples];
+    // read first 12 bytes from a
     a.read((char*)samples, 12);
+    
+    // just to make sure next read() starts from the 12th byte. This is unlikely to be necessary.
     a.seekg(0, a.beg);
     a.seekg(12);
 
+    // read remaining bytes from a
     a.read(((char*)samples) + 12, sizeof(float) * nsamples - 12);
     a.close();
 
